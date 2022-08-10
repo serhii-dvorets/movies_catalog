@@ -43,7 +43,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "nodemon src/api/index.js",
+    "startback": "node src/api/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
