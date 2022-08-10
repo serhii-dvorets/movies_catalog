@@ -17,3 +17,4 @@ margin-bottom: 50px;
 export const PageSubtitle = styled.h2`
 color: white;
 `;
+

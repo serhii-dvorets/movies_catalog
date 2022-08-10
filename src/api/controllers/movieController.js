@@ -1,22 +1,17 @@
 const movieService = require('../service/movieService');
+const multer = require('multer');
+const fs = require('fs');
+const {promisify} = require("util")
+const pipeline = promisify(require("stream").pipeline);
+
+const upload = multer();
 
 class MovieController {
 
   async create(req, res, next) {
     try {
-      const { title, year, format, actors } = req.body;
-      const movieData = await movieService.create(title, year, format, actors);
-      return res.json(movieData);
-    } catch (e) {
-      next(e)
-    }
-  }
-
-  async update(req, res, next) {
-    try {
-      const { title, year, format, actors } = req.body;
-      const id = req.params.id;
-      const movieData = await movieService.update(id, title, year, format, actors);
+      const { title, year, format, actor } = req.body;
+      const movieData = await movieService.create(title, year, format, actor);
       return res.json(movieData);
     } catch (e) {
       next(e)
@@ -26,7 +21,7 @@ class MovieController {
   async getMovie(req, res, next) {
     try {
       const id = req.params.id;
-      const movieData = await movieService.getMovie(id);
+      const movieData = await movieService.getMovieByID(id);
       return res.json(movieData);
     } catch (e) {
       next(e)
@@ -34,6 +29,24 @@ class MovieController {
   }
 
   async getAllMovies(req, res, next) {
+    if (req.query.title) {
+      try {
+        const movieData = await movieService.getMovieByTitle(req.query.title);
+        return res.json(movieData);
+      } catch (e) {
+        next(e)
+      }
+    }
+
+    if (req.query.actor) {
+      try {
+        const movieData = await movieService.getMovieByActor(req.query.actor);
+        return res.json(movieData);
+      } catch (e) {
+        next(e)
+      }
+    }
+
     try {
       const movieData = await movieService.getAllMovies(req);
       return res.json(movieData);
@@ -50,6 +63,10 @@ class MovieController {
     } catch (e) {
       next(e)
     }
+  }
+
+  async import(req, res, next) {
+    console.log(req);
   }
 }
 

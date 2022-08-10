@@ -1,21 +1,32 @@
 import { useFormik } from 'formik';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   LoginPageContainer,
   PageTitle,
   PageSubtitle,
+  LoginButton,
 } from './LoginPage.styles';
 import { LoginForm } from './LoginPage.types';
 import { LoginPageValidationSchema } from './LoginPage.validation';
 import {
   Form,
   Input,
-  Button,
+  message,
 } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { axiosInstance } from '../../axios/axiosInstance';
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) {
+      navigate('/home');
+    }
+  })
+
   const form = useFormik<LoginForm>({
     initialValues: {
       email: '',
@@ -26,7 +37,19 @@ export const LoginPage = () => {
     validateOnChange: false,
 
     async onSubmit(values) {
-
+      try {
+        axiosInstance.post(`http://localhost:8000/api/v1/sessions`, values).then(res => {
+          console.log(res);
+          if (res.statusText === 'OK') {
+            message.success('You are successfully logged in!');
+            localStorage.setItem('accessToken', res.data.token);
+            navigate('/home');
+          }
+        })
+      } catch (e) {
+        console.log('Registration request error', e);
+        return message.error('Something went wront!');
+      }
     }
   })
 
@@ -67,10 +90,7 @@ export const LoginPage = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button
-            type="primary"
-            htmlType='submit'
-          >Submit</Button>
+          <LoginButton type='submit'>login</LoginButton>
         </Form.Item>
       </form>
     </LoginPageContainer>

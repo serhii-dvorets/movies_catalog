@@ -5,6 +5,7 @@ const {
 } = require('sequelize');
 
 const sequelize = require('../database');
+// const ActorModel = require('./actorModel');
 
 class MovieModel extends Model {}
 
@@ -20,15 +21,15 @@ MovieModel.init({
   },
   format: {
     type: DataTypes.STRING
-  },
-  actors: {
-    type: DataTypes.RANGE(DataTypes.STRING)
-    // type: DataTypes.STRING
-  }
+  }, 
+  actors: [
+    {name: DataTypes.STRING}
+  ]
 }, {
   sequelize,
   timestamps: false,
   modelName: 'movie'
 })
+
 
 module.exports = MovieModel;

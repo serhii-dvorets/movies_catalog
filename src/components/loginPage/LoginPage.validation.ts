@@ -10,6 +10,5 @@ export const LoginPageValidationSchema = yup
       .required('input your email'),
     password: yup
       .string()
-      .min(8, 'minimal requirement - 8 symbols')
       .required('input your password')
   })
