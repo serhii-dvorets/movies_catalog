@@ -95,7 +95,11 @@ export const HomePage = () => {
   }
 
   useEffect(() => {
-    getMovies()
+    const initialDownload = async () => {
+      await getMovies()
+    };
+    initialDownload();
+
   }, [])
 
   const form = useFormik({
