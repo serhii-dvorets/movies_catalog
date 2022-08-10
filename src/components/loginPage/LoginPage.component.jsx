@@ -8,7 +8,6 @@ import {
   PageSubtitle,
   LoginButton,
 } from './LoginPage.styles';
-import { LoginForm } from './LoginPage.types';
 import { LoginPageValidationSchema } from './LoginPage.validation';
 import {
   Form,
@@ -27,7 +26,7 @@ export const LoginPage = () => {
     }
   })
 
-  const form = useFormik<LoginForm>({
+  const form = useFormik({
     initialValues: {
       email: '',
       password: '',

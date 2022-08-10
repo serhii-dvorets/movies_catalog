@@ -40,12 +40,10 @@ export const HomePage = () => {
 
     let reader = new FileReader();
     reader.onload = function () {
-      let text = reader.result;
       const result = [];
       const json = reader.result.substring(0).split('\n')
       json.forEach(keyValue => {
         const split = keyValue.split(": ")
-        const key = split[0]
         const value = split[1]
 
         result.push(value)

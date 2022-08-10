@@ -9,3 +9,4 @@ https://hub.docker.com/layers/269982828/serhiidvorets/movies/latest/images/sha25
 
 You can change the API PORT and base url for requests inside the .dev file
 
+github.com:serhii-dvorets/movies_catalog.git

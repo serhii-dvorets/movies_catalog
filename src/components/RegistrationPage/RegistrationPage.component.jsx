@@ -5,7 +5,6 @@ import {
   LoginPageContainer,
   PageTitle,
 } from './RegistrationPage.styles';
-import { LoginForm } from './RegistrationPage.types';
 import { LoginPageValidationSchema } from './RegistrationPage.validation';
 import {
   Form,
@@ -23,7 +22,7 @@ import { LoginButton } from '../loginPage/LoginPage.styles';
 export const RegistrationPage = () => {
   const navigate = useNavigate();
 
-  const form = useFormik<LoginForm>({
+  const form = useFormik({
     initialValues: {
       name: '',
       email: '',

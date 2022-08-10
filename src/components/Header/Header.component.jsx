@@ -9,7 +9,6 @@ import {
   HeaderSubTitle
 } from './Header.styles';
 import jwt_decode from "jwt-decode";
-import { userData } from './Header.types';
 
 export function HeaderComponent() {
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ export function HeaderComponent() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const userData: userData = jwt_decode(token)
+      const userData = jwt_decode(token)
       setUserName(userData.name)
     }
   }, [navigate])
