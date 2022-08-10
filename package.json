@@ -1,6 +1,5 @@
 {
   "name": "movies_catalog",
-  "homepage": "“https://serhii-dvorets.github.io/movies_catalog",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
