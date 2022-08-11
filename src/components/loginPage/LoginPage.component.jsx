@@ -42,6 +42,7 @@ export const LoginPage = () => {
           if (res.statusText === 'OK') {
             message.success('You are successfully logged in!');
             localStorage.setItem('accessToken', res.data.token);
+            window.location.reload();
             navigate('/home');
           }
         })

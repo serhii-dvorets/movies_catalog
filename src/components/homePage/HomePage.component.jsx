@@ -87,7 +87,7 @@ export const HomePage = () => {
   }
 
   const getMovieInfo = (id) => {
-    axiosInstance.get(`${process.env.process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
+    axiosInstance.get(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
       setMovieData(res.data)
     })
   }

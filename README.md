@@ -1,4 +1,6 @@
-Hi, WebbyLab! Ukraine will win! 
+Hi, WebbyLab! Ukraine will win!
+
+Install all dependencies by `npm install`
 
 To test the app, start the backend first
 
