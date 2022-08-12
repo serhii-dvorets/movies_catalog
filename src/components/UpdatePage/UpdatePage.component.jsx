@@ -50,7 +50,6 @@ export const UpdatePage = () => {
   const params = useParams();
 
   useEffect(() => {
-    console.log(params.id)
     getMovieInfo(params.id)
   }, [])
 
