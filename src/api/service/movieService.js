@@ -4,7 +4,6 @@ const ApiError = require('../exeptions/apiError');
 class MovieService {
 
   async create(title, year, format, actor) {
-    console.log(title, year, format, actor);
 
     const movieExists = await MovieModel.findOne({ where: { title } })
     if (movieExists) {
@@ -17,6 +16,18 @@ class MovieService {
       format,
       actors: actor
     })
+
+    return { movie }
+  }
+
+  async update(id, title, year, format, actor) {
+
+    const movie = await MovieModel.update({
+      title,
+      year,
+      format,
+      actors: actor
+    }, { where: { id } })
 
     return { movie }
   }

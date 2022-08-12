@@ -12,6 +12,17 @@ class MovieController {
     }
   }
 
+  async updateMovie(req, res, next) {
+    const id = req.params.id;
+    try {
+      const { title, year, format, actor } = req.body;
+      const movieData = await movieService.update(id, title, year, format, actor);
+      return res.json(movieData);
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async getMovie(req, res, next) {
     try {
       const id = req.params.id;

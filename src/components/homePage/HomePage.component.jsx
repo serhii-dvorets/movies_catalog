@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   PageSubtitle,
   ActorInputContainer,
@@ -21,11 +22,12 @@ import { useState } from 'react';
 import { MovieAddingValidationSchema } from './HomePage.validation';
 import { useFormik } from 'formik';
 import { Select, List } from 'antd';
-import { LoginButton } from '../loginPage/LoginPage.styles';
+import { LoginButton } from '../LoginPage/LoginPage.styles';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export const HomePage = () => {
+  const navigate = useNavigate();
   const { Option } = Select;
   const [movies, setMovies] = useState([]);
   const [movieData, setMovieData] = useState(null);
@@ -348,12 +350,17 @@ export const HomePage = () => {
                         movie info
                       </Button>
                       <div className='container'>
-
                         <Button
                           type='primary'
                           onClick={() => confirmOnDelete(movie.id, movie.title)}
                         >
                           delete movie
+                        </Button>
+                        <Button
+                          type='link'
+                          onClick={() => navigate(`/update/${movie.id}`)}
+                        >
+                          update movie
                         </Button>
                       </div>
 
