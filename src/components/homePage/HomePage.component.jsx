@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { MovieAddingValidationSchema } from './HomePage.validation';
 import { useFormik } from 'formik';
 import { Select, List } from 'antd';
-import { LoginButton } from '../LoginPage/LoginPage.styles';
+import { LoginButton } from '../loginPage/LoginPage.styles';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 

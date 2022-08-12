@@ -17,7 +17,7 @@ import {
   MailOutlined
 } from '@ant-design/icons';
 import { axiosInstance } from '../../axios/axiosInstance';
-import { LoginButton } from '../LoginPage/LoginPage.styles';
+import { LoginButton } from '../loginPage/LoginPage.styles';
 
 export const RegistrationPage = () => {
   const navigate = useNavigate();

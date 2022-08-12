@@ -13,7 +13,7 @@ import { MovieAddingValidationSchema } from './UpdatePage.validation';
 import { useFormik } from 'formik';
 import { Select, Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { LoginButton } from '../LoginPage/LoginPage.styles';
+import { LoginButton } from '../loginPage/LoginPage.styles';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export const UpdatePage = () => {
