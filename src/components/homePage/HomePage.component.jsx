@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { PageSubtitle, ActorInputContainer, MainContainer, MovieFormContainer, MovieListItem, MovieListHeader, MovieTitle, MovieInfoContainer, MovieInfoTitle, MovieInfoData, SearchButtonsContainer, FileInputContainer } from './HomePage.styles';
-import { Button, Form, Input, message, Radio } from 'antd';
-import { MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import { Button, Form, Input, message, Radio, Popconfirm } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { axiosInstance } from '../../axios/axiosInstance';
 import { useState } from 'react';
 import { MovieAddingValidationSchema } from './HomePage.validation';
@@ -92,6 +92,8 @@ export const HomePage = () => {
 
 
   const deleteMovie = (id) => {
+    // eslint-disable-next-line
+    confirm('You really want to delete this movie?');
     axiosInstance.delete(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
       if (res.statusText === 'OK') {
         message.success('Movie successfully deleted!');
@@ -302,11 +304,11 @@ export const HomePage = () => {
                         onClick={() => {
                           deleteMovie(movie.id);
                           getMovies();
-                          window.location.reload();
                         }}
                       >
                         delete movie
                       </Button>
+
                     </List.Item>
                   </MovieListItem>
                 </>
