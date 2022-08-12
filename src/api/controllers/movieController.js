@@ -8,7 +8,7 @@ const upload = multer();
 
 class MovieController {
 
-  async create(req, res, next) {
+  async createMovie(req, res, next) {
     try {
       const { title, year, format, actor } = req.body;
       const movieData = await movieService.create(title, year, format, actor);
@@ -55,7 +55,7 @@ class MovieController {
     }
   }
 
-  async delete(req, res, next) {
+  async deleteMovie(req, res, next) {
     try {
       const id = req.params.id;
       await movieService.delete(id);
@@ -63,10 +63,6 @@ class MovieController {
     } catch (e) {
       next(e)
     }
-  }
-
-  async import(req, res, next) {
-    console.log(req);
   }
 }
 

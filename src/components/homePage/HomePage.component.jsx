@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { PageSubtitle, ActorInputContainer, MainContainer, MovieFormContainer, MovieListItem, MovieListHeader, MovieTitle, MovieInfoContainer, MovieInfoTitle, MovieInfoData, SearchButtonsContainer } from './HomePage.styles';
+import { PageSubtitle, ActorInputContainer, MainContainer, MovieFormContainer, MovieListItem, MovieListHeader, MovieTitle, MovieInfoContainer, MovieInfoTitle, MovieInfoData, SearchButtonsContainer, FileInputContainer } from './HomePage.styles';
 import { Button, Form, Input, message, Radio } from 'antd';
 import { MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import { axiosInstance } from '../../axios/axiosInstance';
@@ -17,6 +17,7 @@ export const HomePage = () => {
   const [actors, setActors] = useState([]);
   const [title, setTitle] = useState('');
   const [actor, setActor] = useState('');
+  const [moviesFromFile, setMoviesFromFile] = useState([]);
 
   const addMovie = async (values) => {
     try {
@@ -28,40 +29,52 @@ export const HomePage = () => {
           setActors([]);
           getMovies();
         }
-      })
+      }).catch(e => message.error(e.response.data.message))
     } catch (e) {
       console.log('Registration request error', e);
       return message.error('Something went wront!');
     }
   }
 
+  const createMoviesFromFile = () => {
+    if (moviesFromFile.length === 0) {
+      return message.error('file wasn\'t downloaded');
+    }
+    moviesFromFile.map(movie => addMovie(movie));
+    setMoviesFromFile([]);
+  }
+
   const openFile = (event) => {
     let input = event.target;
+    if (input.files[0].type !== 'text/plain') {
+      message.error('wrong file type')
+    }
 
     let reader = new FileReader();
     reader.onload = function () {
       const result = [];
       const json = reader.result.substring(0).split('\n')
+      console.log(typeof json)
       json.forEach(keyValue => {
         const split = keyValue.split(": ")
         const value = split[1]
 
         result.push(value)
       })
-      const sortedAArray = [];
+      const moviesFromFile = [];
       for (let i = 0; i < result.length - 1; i += 5) {
-        const movieObj = {
-          title: result[i],
-          year: result[i + 1],
-          format: result[i + 2],
-          actor: result[i + 3],
+        if (result[i]) {
+          const movieObj = {
+            title: result[i],
+            year: result[i + 1],
+            format: result[i + 2],
+            actor: result[i + 3],
+          }
+          moviesFromFile.push(movieObj);
         }
-
-        addMovie(movieObj);
-        sortedAArray.push(movieObj);
+        setMoviesFromFile(moviesFromFile);
       }
-    };
-
+    }
     reader.readAsText(input.files[0]);
   }
 
@@ -69,11 +82,11 @@ export const HomePage = () => {
     if (!param) {
       axiosInstance.get(`${process.env.REACT_APP_API_BASEURL}/movies`).then(res => {
         setMovies(res.data)
-      })
+      }).catch(e => message.error(e.response.data.message))
     } else {
       axiosInstance.get(`${process.env.REACT_APP_API_BASEURL}/movies?${param}=${value}`).then(res => {
         setMovies(res.data)
-      })
+      }).catch(e => message.error(e.response.data.message))
     }
   }
 
@@ -83,13 +96,13 @@ export const HomePage = () => {
       if (res.statusText === 'OK') {
         message.success('Movie successfully deleted!');
       }
-    })
+    }).catch(e => message.error(e.response.data.message))
   }
 
   const getMovieInfo = (id) => {
     axiosInstance.get(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
       setMovieData(res.data)
-    })
+    }).catch(e => message.error(e.response.data.message))
   }
 
   useEffect(() => {
@@ -275,7 +288,7 @@ export const HomePage = () => {
                 <>
                   <MovieListItem key={movie.title}>
                     {<MovieTitle>{movie.title}</MovieTitle>}
-                    <List.Item>
+                    <List.Item key={movie.title}>
                       <Button
                         type='dashed'
                         onClick={() => {
@@ -289,6 +302,7 @@ export const HomePage = () => {
                         onClick={() => {
                           deleteMovie(movie.id);
                           getMovies();
+                          window.location.reload();
                         }}
                       >
                         delete movie
@@ -375,13 +389,16 @@ export const HomePage = () => {
               </Button>
             </Form.Item>
           </ActorInputContainer>
-          <input
-            type="file"
-            id='file'
-            text='create movies list from file'
-            onChange={(e) => {
-              openFile(e);
-            }} />
+          <FileInputContainer>
+            <input
+              type="file"
+              id='file'
+              accept='.txt'
+              onChange={(e) => {
+                openFile(e);
+              }} />
+            <Button onClick={createMoviesFromFile}>create movies</Button>
+          </FileInputContainer>
         </SearchButtonsContainer>
       </MainContainer>
     </>

@@ -9,6 +9,8 @@ export const MovieAddingValidationSchema = yup
       .required('Enter a title'),
     year: yup
       .number()
+      .min(1900)
+      .max(2022)
       .required('Enter a year'),
     format: yup
       .string()

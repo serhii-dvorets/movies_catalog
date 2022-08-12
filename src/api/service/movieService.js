@@ -31,12 +31,12 @@ class MovieService {
   }
 
   async getMovieByTitle(title) {
-    const movieData = await MovieModel.findAll({ where: { title } })
+    const movieData = await MovieModel.findAll()
     if (!movieData) {
       throw ApiError.BadRequest(`The movie with title ${title} doesn\'t exist`)
     }
 
-    return movieData;
+    return movieData.filter(movie => movie.title.split(' ').includes(title));
   }
 
   async getMovieByActor(actor) {

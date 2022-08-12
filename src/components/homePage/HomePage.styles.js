@@ -24,6 +24,11 @@ display: flex;
 gap: 10px;
 `
 
+export const FileInputContainer = styled.div`
+display: flex;
+gap: 10px;
+`
+
 export const MainContainer = styled.div`
 padding-top: 70px;
 display: flex;
