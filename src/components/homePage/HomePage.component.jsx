@@ -9,6 +9,8 @@ import { MovieAddingValidationSchema } from './HomePage.validation';
 import { useFormik } from 'formik';
 import { Select, List } from 'antd';
 import { LoginButton } from '../loginPage/LoginPage.styles';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export const HomePage = () => {
   const { Option } = Select;
@@ -18,6 +20,26 @@ export const HomePage = () => {
   const [title, setTitle] = useState('');
   const [actor, setActor] = useState('');
   const [moviesFromFile, setMoviesFromFile] = useState([]);
+
+  const confirmOnDelete = (id) => {
+    confirmAlert({
+      title: 'Warning!',
+      message: 'You are really want to delete this movie?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            deleteMovie(id);
+            getMovies();
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => message.info('Deleting cancelled')
+        }
+      ]
+    });
+  };
 
   const addMovie = async (values) => {
     try {
@@ -92,8 +114,6 @@ export const HomePage = () => {
 
 
   const deleteMovie = (id) => {
-    // eslint-disable-next-line
-    confirm('You really want to delete this movie?');
     axiosInstance.delete(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
       if (res.statusText === 'OK') {
         message.success('Movie successfully deleted!');
@@ -299,15 +319,15 @@ export const HomePage = () => {
                       >
                         movie info
                       </Button>
-                      <Button
-                        type='primary'
-                        onClick={() => {
-                          deleteMovie(movie.id);
-                          getMovies();
-                        }}
-                      >
-                        delete movie
-                      </Button>
+                      <div className='container'>
+
+                        <Button
+                          type='primary'
+                          onClick={() => confirmOnDelete(movie.id)}
+                        >
+                          delete movie
+                        </Button>
+                      </div>
 
                     </List.Item>
                   </MovieListItem>
