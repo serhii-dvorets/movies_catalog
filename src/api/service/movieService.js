@@ -69,6 +69,11 @@ class MovieService {
     await MovieModel.destroy({ where: { id } })
   }
 
+  async count() {
+    const number = await MovieModel.count();
+    return number;
+  }
+
 }
 
 module.exports = new MovieService();

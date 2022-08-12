@@ -45,7 +45,7 @@ export const LoginPage = () => {
             window.location.reload();
             navigate('/home');
           }
-        })
+        }).catch(e => message.error(e.response.data.message))
       } catch (e) {
         console.log('Registration request error', e);
         return message.error('Something went wront!');

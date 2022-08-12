@@ -1,7 +1,20 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { PageSubtitle, ActorInputContainer, MainContainer, MovieFormContainer, MovieListItem, MovieListHeader, MovieTitle, MovieInfoContainer, MovieInfoTitle, MovieInfoData, SearchButtonsContainer, FileInputContainer } from './HomePage.styles';
-import { Button, Form, Input, message, Radio, Popconfirm } from 'antd';
+import {
+  PageSubtitle,
+  ActorInputContainer,
+  MainContainer,
+  MovieFormContainer,
+  MovieListItem,
+  MovieListHeader,
+  MovieTitle,
+  MovieInfoContainer,
+  MovieInfoTitle,
+  MovieInfoData,
+  SearchButtonsContainer,
+  FileInputContainer
+} from './HomePage.styles';
+import { Button, Form, Input, message, Radio } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { axiosInstance } from '../../axios/axiosInstance';
 import { useState } from 'react';
@@ -21,7 +34,7 @@ export const HomePage = () => {
   const [actor, setActor] = useState('');
   const [moviesFromFile, setMoviesFromFile] = useState([]);
 
-  const confirmOnDelete = (id) => {
+  const confirmOnDelete = (id, title) => {
     confirmAlert({
       title: 'Warning!',
       message: 'You are really want to delete this movie?',
@@ -29,8 +42,9 @@ export const HomePage = () => {
         {
           label: 'Yes',
           onClick: () => {
-            deleteMovie(id);
+            deleteMovie(id, title);
             getMovies();
+            setTimeout(() => {countMovies(title)}, 1000)
           }
         },
         {
@@ -46,7 +60,6 @@ export const HomePage = () => {
       axiosInstance.post(`${process.env.REACT_APP_API_BASEURL}/movies`, values).then(res => {
         console.log(res);
         if (res.statusText === 'OK') {
-          message.success('Movie successfully created!');
           form.resetForm();
           setActors([]);
           getMovies();
@@ -63,7 +76,10 @@ export const HomePage = () => {
       return message.error('file wasn\'t downloaded');
     }
     moviesFromFile.map(movie => addMovie(movie));
-    setMoviesFromFile([]);
+    setTimeout(() => {
+      countMovies();
+      setMoviesFromFile([]);
+    }, 2000)
   }
 
   const openFile = (event) => {
@@ -112,12 +128,24 @@ export const HomePage = () => {
     }
   }
 
-
-  const deleteMovie = (id) => {
-    axiosInstance.delete(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
-      if (res.statusText === 'OK') {
-        message.success('Movie successfully deleted!');
+  const countMovies = (title) => {
+    const initialNumberOfMovies = movies.length;
+    axiosInstance.get(`${process.env.REACT_APP_API_BASEURL}/count`).then(res => {
+      if (initialNumberOfMovies > res.data.number) {
+        return message.info(`Movie ${title} was successfully deleted`)
+      } else {
+        const newMovies = res.data.number - initialNumberOfMovies;
+        console.log(newMovies)
+        return message.info(`${(newMovies === 1)
+          ? `Movie ${title} was successfully created`
+          : `${newMovies} movies were successfully added`}`)
       }
+    }).catch(e => message.error(e.response.data.message))
+  }
+
+  const deleteMovie = (id, title) => {
+    axiosInstance.delete(`${process.env.REACT_APP_API_BASEURL}/movies/${id}`).then(res => {
+      console.log(res)
     }).catch(e => message.error(e.response.data.message))
   }
 
@@ -132,7 +160,6 @@ export const HomePage = () => {
       await getMovies()
     };
     initialDownload();
-
   }, [])
 
   const form = useFormik({
@@ -148,7 +175,8 @@ export const HomePage = () => {
 
     async onSubmit(values) {
       values.actor = actors
-      addMovie(values)
+      addMovie(values);
+      setTimeout(() => { countMovies(values.title) }, 1000)
     }
   })
 
@@ -323,7 +351,7 @@ export const HomePage = () => {
 
                         <Button
                           type='primary'
-                          onClick={() => confirmOnDelete(movie.id)}
+                          onClick={() => confirmOnDelete(movie.id, movie.title)}
                         >
                           delete movie
                         </Button>
@@ -419,7 +447,7 @@ export const HomePage = () => {
               onChange={(e) => {
                 openFile(e);
               }} />
-            <Button onClick={createMoviesFromFile}>create movies</Button>
+            <Button type='primary' onClick={createMoviesFromFile}>load</Button>
           </FileInputContainer>
         </SearchButtonsContainer>
       </MainContainer>

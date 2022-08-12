@@ -1,6 +1,3 @@
-const multer = require('multer');
-const upload = multer();
-
 const Router = require('express').Router;
 const movieController = require('../controllers/movieController');
 const userController = require('../controllers/userController');
@@ -14,5 +11,6 @@ router.post('/movies', authMiddleware, movieController.createMovie);
 router.delete('/movies/:id', authMiddleware, movieController.deleteMovie);
 router.get('/movies/:id', authMiddleware, movieController.getMovie);
 router.get('/movies', authMiddleware, movieController.getAllMovies);
+router.get('/count', authMiddleware, movieController.countMovies);
 
 module.exports = router;

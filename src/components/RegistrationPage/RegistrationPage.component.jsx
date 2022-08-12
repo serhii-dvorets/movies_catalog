@@ -41,7 +41,7 @@ export const RegistrationPage = () => {
             message.success('You are successfully registered!');
             navigate('/');
           }
-        })
+        }).catch(e => message.error(e.response.data.message))
       } catch (e) {
         console.log('Registration request error', e);
         return message.error('Something went wront!');

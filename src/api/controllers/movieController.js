@@ -1,10 +1,4 @@
 const movieService = require('../service/movieService');
-const multer = require('multer');
-const fs = require('fs');
-const {promisify} = require("util")
-const pipeline = promisify(require("stream").pipeline);
-
-const upload = multer();
 
 class MovieController {
 
@@ -59,7 +53,15 @@ class MovieController {
     try {
       const id = req.params.id;
       await movieService.delete(id);
-      res.send('movie removed');
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  async countMovies(req, res, next) {
+    try {
+      const number = await movieService.count();
+      return res.json({number: number})
     } catch (e) {
       next(e)
     }

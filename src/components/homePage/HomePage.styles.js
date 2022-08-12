@@ -27,6 +27,7 @@ gap: 10px;
 export const FileInputContainer = styled.div`
 display: flex;
 gap: 10px;
+max-width: 265px;
 `
 
 export const MainContainer = styled.div`
@@ -84,7 +85,7 @@ export const MovieInfoTitle = styled.div`
 export const MovieInfoData = styled.div`
 display: flex;
 font-style: italic;
-max-width: 300px;
+max-width: 200px;
 font-size: 18px;
 `
 
@@ -98,4 +99,3 @@ display: flex;
 align-items: center;
 flex-direction: column;
 `
-
